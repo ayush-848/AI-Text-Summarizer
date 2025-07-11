@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
@@ -6,19 +7,34 @@ const port = 3000;
 
 const summarizeText = require('./summarize.js');
 
-app.use(express.static('public'));
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.post('/summarize', (req, res) => {
   const text = req.body.text_to_summarize;
+
+  if (!text) {
+    console.error("Error: No text provided for summarization.");
+    return res.status(400).send("No text provided for summarization.");
+  }
+
   summarizeText(text)
     .then(response => {
       res.send(response);
     })
     .catch(error => {
-      console.log(error.message);
+      console.error("Summarization API error:", error.message);
+      res.status(500).send("Error summarizing text. Please try again later.");
     });
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
+
+module.exports = app;
