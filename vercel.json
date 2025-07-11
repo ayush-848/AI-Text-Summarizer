@@ -8,10 +8,6 @@
   ],
   "routes": [
     {
-      "src": "/script.js",
-      "dest": "public/script.js"
-    },
-    {
       "src": "/stylesheet.css",
       "dest": "public/stylesheet.css"
     },
