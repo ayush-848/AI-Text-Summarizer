@@ -9,8 +9,10 @@ const summarizeText = require('./summarize.js');
 
 app.use(express.json());
 
+// This is crucial: Your Express app needs to serve static files itself.
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Explicitly handle the root route to serve index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
